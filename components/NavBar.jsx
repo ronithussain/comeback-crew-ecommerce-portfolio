@@ -11,31 +11,31 @@ const NavBar = () => {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     return (
-        <nav className='sticky top-0 z-50 bg-slate-400 px-6 py-4 flex items-center justify-between'>
+        <nav className='sticky top-0 z-50 bg-slate-200 sm:px-6 px-1 py-4 flex items-center justify-between'>
             {/* left section: logo */}
-            <div className='flex flex-col leading-tight'>
-                <span className='text-lg md:text-2xl font-bold text-red-600'>
+            <div className=' flex flex-col leading-tight'>
+                <span className='text-base md:text-2xl font-bold text-[#a91f64]'>
                     Comeback-Crew
                 </span>
-                <span className="text-sm text-gray-200 tracking-widest self-center">
+                <span className="text-xs sm:text-sm text-gray-700 tracking-widest self-center">
                     Restaurant Store
                 </span>
             </div>
 
             {/* center section: nav links */}
-            <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
+            <ul className=" hidden md:flex gap-8 text-gray-700 font-medium">
                 <li>
-                    <Link href="/" className="hover:text-red-400">Home</Link>
+                    <Link href="/" className="hover:text-[#a91f64]">Home</Link>
                 </li>
-                <li className="hover:text-red-400 cursor-pointer">New Arrivals</li>
-                <li className="hover:text-red-400 cursor-pointer">Top Sellers</li>
+                <li className="hover:text-[#a91f64] cursor-pointer">New Arrivals</li>
+                <li className="hover:text-[#a91f64] cursor-pointer">Top Sellers</li>
                 <li>
-                    <Link href="/products" className="hover:text-red-400">Products</Link>
+                    <Link href="/products" className="hover:text-[#a91f64]">Products</Link>
                 </li>
             </ul>
 
             {/* right section: icons */}
-            <div className="flex items-center gap-6 text-gray-700 text-xl">
+            <div className=" flex items-center gap-6 text-gray-700 text-xl">
                 <div className="flex gap-6">
                     <FaTruck className="hover:text-[#a01f64]" />
                     <Link href="/wishlist">
