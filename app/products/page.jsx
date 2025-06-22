@@ -7,24 +7,70 @@ import { FaTimes } from "react-icons/fa";
 const ProductsPage = () => {
 
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-
-    // sort functionality start here:
     const [sortOrder, setSortOrder] = useState("default");
 
-    let products = data.products
+    // filter functionality start here:
+    // step 1: initialize filter state with empty arrays for each filter type
+    const [filters, setFilters] = useState({
+        category: [],
+        priceRange: [],
+        availability: [],
+        material: [],
+        roomType: [],
+        style: []
+    })
+
+    // step 2: toggle filter values in state (add/remove) when checkboxes are clicked
+    const handleFilterChange = (filterType, value) => {
+        setFilters((prev) => ({
+            ...prev,
+            [filterType]: prev[filterType].includes(value)
+                ?
+                prev[filterType].filter((v) => v !== value)
+                :
+                [...prev[filterType], value],
+        }));
+    }
+
+    // step 3: define price range predicates for filtering products by price
+    const priceRanges = {
+        "$0 - $100": (price) => 0 && price <= 100,
+        "$100 - $300": (price) => price >= 100 && price <= 300,
+        "$300+": (price) => price > 300,
+    };
+
+    // step 4: filter products based on selected filters
+    const filteredProducts = data.products.filter((product) => {
+        return (
+            (filters.category.length === 0 || filters.category.includes(product.category)) &&
+            (filters.priceRange.length === 0 || filters.priceRange.some((range) => priceRanges[range](product.price))) &&
+            (filters.availability.length === 0) || filters.availability.includes(product.inStock ? "In Stock" : "Out of stock") &&
+            (filters.material.length === 0 || filters.material.includes(product.material)) &&
+            (filters.roomType.length === 0 || filters.roomType.includes(product.roomType)) &&
+            (filters.style.length === 0 || filters.style.includes(product.style))
+        );
+    });
+    // filter functionality ends here;
+
+
+
+    // sort functionality start here:
+    // let products = data.products // <----------
+    let sortedProducts = [...filteredProducts] // create a copy of filtered products for sorting
 
     if (sortOrder === "price-low") {
-        products = [...products].sort((a, b) => a.price - b.price)
+        sortedProducts = [...sortedProducts].sort((a, b) => a.price - b.price)
     } else if (sortOrder === "price-high") {
-        products = [...products].sort((a, b) => b.price - a.price)
+        sortedProducts = [...sortedProducts].sort((a, b) => b.price - a.price)
     } else if (sortOrder === "name") {
-        products = [...products].sort((a, b) => a.text.localeCompare(b.text))
+        sortedProducts = [...sortedProducts].sort((a, b) => a.text.localeCompare(b.text))
     }
 
     const handleSort = (order) => {
         setSortOrder(order)
     }
-    // sort functionality ends here:
+    // sort functionality ends here;
+
     return (
         <div className="w-full max-w-7xl mx-auto my-12 px-4 max-[774px]:my-8 max-[774px]:px-3">
             {/* page title */}
@@ -36,6 +82,8 @@ const ProductsPage = () => {
                     <h3 className="text-xl font-semibold text-gray-800 mb-4">
                         Filter Options
                     </h3>
+
+                    {/* step 5: bind checkboxes to filter state for user interaction */}
                     <div className="space-y-6">
                         {/* type 1 */}
                         <div>
@@ -44,7 +92,12 @@ const ProductsPage = () => {
                             </h4>
                             {["Furniture", "Lighting", "Decor"].map((cat) => (
                                 <label key={cat} className="block mt-2">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={filters.category.includes(cat)} //check if category is in filters.category
+                                        onChange={() => handleFilterChange("category", cat)} //update filters.category in toggle
+                                    />
                                     {cat}
                                 </label>
                             ))}
@@ -56,7 +109,12 @@ const ProductsPage = () => {
                             </h4>
                             {["$0 - $100", "$100 - $300", "$300+"].map((range) => (
                                 <label key={range} className="block mt-2">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={filters.priceRange.includes(range)}
+                                        onChange={() => handleFilterChange("priceRange", range)}
+                                    />
                                     {range}
                                 </label>
                             ))}
@@ -68,7 +126,12 @@ const ProductsPage = () => {
                             </h4>
                             {["In Stock", "Out of stock"].map((avail) => (
                                 <label key={avail} className="block mt-2">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={filters.availability.includes(avail)}
+                                        onChange={() => handleFilterChange("availability", avail)}
+                                    />
                                     {avail}
                                 </label>
                             ))}
@@ -80,7 +143,12 @@ const ProductsPage = () => {
                             </h4>
                             {["Wood", "Metal", "Fabric", "Leather", "Glass", "Rattan"].map((mat) => (
                                 <label key={mat} className="block mt-2">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={filters.material.includes(mat)}
+                                        onChange={() => handleFilterChange("material", mat)}
+                                    />
                                     {mat}
                                 </label>
                             ))}
@@ -98,7 +166,12 @@ const ProductsPage = () => {
                                 "Kitchen"
                             ].map((type) => (
                                 <label key={type} className="block mt-2">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={filters.roomType.includes(type)}
+                                        onChange={() => handleFilterChange("roomType", type)}
+                                    />
                                     {type}
                                 </label>
                             ))}
@@ -118,7 +191,12 @@ const ProductsPage = () => {
                                 "Scandinavian",
                             ].map((sty) => (
                                 <label key={sty} className="block mt-2">
-                                    <input type="checkbox" className="mr-2" />
+                                    <input
+                                        type="checkbox"
+                                        className="mr-2"
+                                        checked={filters.style.includes(sty)}
+                                        onChange={() => handleFilterChange("style", sty)}
+                                    />
                                     {sty}
                                 </label>
                             ))}
@@ -127,11 +205,11 @@ const ProductsPage = () => {
 
                 </div>
 
-                {/* products list title & sort by button */}
                 <div className="w-full md:w-3/4">
+                    {/* products list title & sort by button */}
                     <div className="flex justify-between items-center mb-6 max-[774px]:mb-4">
                         <h2 className="text-xl font-semibold text-gray-800 max-[774]:text-base">
-                            Products List (12)
+                            Products List: ({sortedProducts.length})
                         </h2>
                         <div className="hidden min-[774px]:flex items-center gap-3">
                             <span className="text-gray-700 font-medium">Sort By:</span>
@@ -188,7 +266,7 @@ const ProductsPage = () => {
                                     </button>
                                 </div>
 
-                                {/* category */}
+                                {/* category type*/}
                                 <div className="space-y-6 max-[774px]:space-y-3">
                                     {/* type 1 */}
                                     <div>
@@ -197,7 +275,12 @@ const ProductsPage = () => {
                                         </h4>
                                         {["Furniture", "Lighting"].map((cat) => (
                                             <label key={cat} className="flex items-center text-base max-[774px]:text-sm mt-2">
-                                                <input type="checkbox" className="mr-2 w-4 h-4 max-[774px]:h-5" />
+                                                <input
+                                                    type="checkbox"
+                                                    className="mr-2 w-4 h-4 max-[774px]:h-5"
+                                                    checked={filters.category.includes(cat)} //check if category is in filters.category
+                                                    onChange={() => handleFilterChange("category", cat)} //update filters.category in toggle 
+                                                />
                                                 {cat}
                                             </label>
                                         ))}
@@ -209,7 +292,12 @@ const ProductsPage = () => {
                                         </h4>
                                         {["$0 - $100", "$100 - $300", "$300+"].map((range) => (
                                             <label key={range} className="flex items-center text-base max-[774px]:text-sm mt-2">
-                                                <input type="checkbox" className="mr-2 w-4 h-4 max-[774px]:h-5" />
+                                                <input
+                                                    type="checkbox"
+                                                    className="mr-2 w-4 h-4 max-[774px]:h-5"
+                                                    checked={filters.priceRange.includes(range)}
+                                                    onChange={() => handleFilterChange("priceRange", range)}
+                                                />
                                                 {range}
                                             </label>
                                         ))}
@@ -221,7 +309,12 @@ const ProductsPage = () => {
                                         </h4>
                                         {["In Stock", "Out of stock"].map((avail) => (
                                             <label key={avail} className="flex items-center text-base max-[774px]:text-sm mt-2">
-                                                <input type="checkbox" className="mr-2 w-4 h-4 max-[774px]:h-5" />
+                                                <input
+                                                    type="checkbox"
+                                                    className="mr-2 w-4 h-4 max-[774px]:h-5"
+                                                    checked={filters.availability.includes(avail)}
+                                                    onChange={() => handleFilterChange("availability", avail)}
+                                                />
                                                 {avail}
                                             </label>
                                         ))}
@@ -239,7 +332,7 @@ const ProductsPage = () => {
 
                     {/* products cards section */}
                     <div className="grid grid-cols-1 gap-6 max-[774px]:gap-3 min-[774px]:grid-cols-2 md:grid-cols-3">
-                        {products.map((product) => (
+                        {sortedProducts.map((product) => (
                             <div key={product.id}>
                                 <ProductCard
                                     id={product.id}
