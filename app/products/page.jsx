@@ -1,20 +1,38 @@
 "use client"
 import ProductCard from "@/components/ProductCard";
-import { products } from "../../public/data/data.json"
+import data from "../../public/data/data.json"
 import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 
 const ProductsPage = () => {
 
-    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+    // sort functionality start here:
+    const [sortOrder, setSortOrder] = useState("default");
+
+    let products = data.products
+
+    if (sortOrder === "price-low") {
+        products = [...products].sort((a, b) => a.price - b.price)
+    } else if (sortOrder === "price-high") {
+        products = [...products].sort((a, b) => b.price - a.price)
+    } else if (sortOrder === "name") {
+        products = [...products].sort((a, b) => a.text.localeCompare(b.text))
+    }
+
+    const handleSort = (order) => {
+        setSortOrder(order)
+    }
+    // sort functionality ends here:
     return (
-        <div className="w-full max-w-7xl mx-auto border my-12 px-4 max-[774px]:my-8 max-[774px]:px-3">
+        <div className="w-full max-w-7xl mx-auto my-12 px-4 max-[774px]:my-8 max-[774px]:px-3">
             {/* page title */}
             <h1 className="text-3xl md:text-4xl font-bold text-gray-700 mb-6 max-[774px]:text-xl max-[774px]:mb-4 max-[774px]:top-0 max-[774px]:z-10 max-[774px]:pt-4 ">Products</h1>
 
             <div className="flex flex-col md:flex-row gap-6 max-[774px]:gap-4">
                 {/* filter section */}
-                <div className="border hidden min-[774px]:block w-full md:w-1/4 bg-white rounded-lg shadow-md p-6">
+                <div className=" hidden min-[774px]:block w-full md:w-1/4 bg-white rounded-lg shadow-md p-6">
                     <h3 className="text-xl font-semibold text-gray-800 mb-4">
                         Filter Options
                     </h3>
@@ -119,6 +137,8 @@ const ProductsPage = () => {
                             <span className="text-gray-700 font-medium">Sort By:</span>
                             <select
                                 className="border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a91f64]"
+                                value={sortOrder}
+                                onChange={(e) => handleSort(e.target.value)}
                             >
                                 <option value="default">Newest</option>
                                 <option value="price-low">Price: Low to High</option>
@@ -139,6 +159,8 @@ const ProductsPage = () => {
                             </button>
                             <select
                                 className="border border-gray-300 rounded-md px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a91f64] flex-1 cursor-pointer"
+                                value={sortOrder}
+                                onChange={(e) => handleSort(e.target.value)}
                             >
                                 <option value="default">Newest</option>
                                 <option value="price-low">Price: Low</option>
