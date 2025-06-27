@@ -3,12 +3,17 @@
 import Link from "next/link";
 import { useState } from "react";
 import { FaBars, FaHeart, FaShoppingCart, FaTimes, FaTruck } from "react-icons/fa"
+import { useSelector } from "react-redux";
 
 
 const NavBar = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    // get cart items from redux store to display the item count
+    const cartItems = useSelector((state) => state.cart.items)
+    const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
 
     return (
         <nav className='sticky top-0 z-50 bg-slate-200 sm:px-6 px-1 py-4 flex items-center justify-between'>
@@ -41,8 +46,13 @@ const NavBar = () => {
                     <Link href="/wishlist">
                         <FaHeart className="hover:text-[#a01f64]" />
                     </Link>
-                    <Link href="/cart">
+                    <Link href="/cart" className="relative">
                         <FaShoppingCart className="hover:text-[#a01f64]" />
+                        {cartItemCount > 0 && (
+                            <span className="absolute -top-3 -right-4 text-xs text-white bg-[#a91f64] rounded-full px-1.5 py-0.5">
+                                {cartItemCount}
+                            </span>
+                        )}
                     </Link>
                 </div>
                 {/* menu icon */}
