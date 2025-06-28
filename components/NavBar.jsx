@@ -15,6 +15,10 @@ const NavBar = () => {
     const cartItems = useSelector((state) => state.cart.items)
     const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
 
+
+    // get wishlist items from redux store to display item count
+    const wishlistItems = useSelector((state) => state.wishlist.items);
+    const wishlistItemCount = wishlistItems.length;
     return (
         <nav className='sticky top-0 z-50 bg-slate-200 sm:px-6 px-1 py-4 flex items-center justify-between'>
             {/* left section: logo */}
@@ -43,8 +47,14 @@ const NavBar = () => {
             <div className=" flex items-center gap-6 text-gray-700 text-xl">
                 <div className="flex gap-6">
                     <FaTruck className="hover:text-[#a01f64]" />
-                    <Link href="/wishlist">
-                        <FaHeart className="hover:text-[#a01f64]" />
+                    <Link href="/wishlist" className="relative">
+                        <FaHeart
+                        className="hover:text-[#a01f64]" />
+                        {wishlistItemCount > 0 && (
+                            <span className="absolute -top-3 -right-4 text-xs text-white bg-[#a91f64] rounded-full px-1.5 py-0.5">
+                                {wishlistItemCount}
+                            </span>
+                        )}
                     </Link>
                     <Link href="/cart" className="relative">
                         <FaShoppingCart className="hover:text-[#a01f64]" />

@@ -56,6 +56,9 @@ const CardCarousel = ({ title, cards }) => {
                                 image={card.image}
                                 text={card.text}
                                 price={card.price}
+                                id={card.id}
+                                category={card.category}
+                                inStock={card.inStock}
                             />
                         </div>
                     ))}

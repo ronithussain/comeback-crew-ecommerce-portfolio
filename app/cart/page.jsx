@@ -71,7 +71,7 @@ const CartPage = () => {
                                             : ""
                                             }`}
                                     >
-                                        {/* product image and name */}
+                                        {/* product image and name div-1 */}
                                         <div className="flex items-center gap-4 w-full">
                                             <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink">
                                                 <Image
@@ -85,51 +85,56 @@ const CartPage = () => {
                                                 <p className="text-gray-800 font-medium text-sm sm:text-base">
                                                     {item.text}
                                                 </p>
+                                                <p className="text-xs sm:text-sm text-gray-700">
+                                                    {item.category}
+                                                </p>
                                             </div>
                                         </div>
 
-                                        {/* product price */}
+                                        {/* product price div-2 */}
                                         <div className="text-gray-700 text-sm sm:text-base flex justify-between w-full sm:block pl-2.5">
                                             <span>Price:</span>
                                             {Number(item.price).toFixed(2)}
                                         </div>
 
-                                        {/* product quantity */}
-                                        <div className="flex items-center w-full sm:w-auto">
-                                            <span className="sm:hidden font-semibold mr-44 sm:mr-2">Quantity</span>
+                                        {/* product quantity div-3 */}
+                                        <div className="flex justify-between items-center w-full">
+                                            <span className="sm:hidden font-semibold ">Quantity</span>
 
-                                            {/* decrease button */}
-                                            <button
-                                                className="w-6 h-6 pb-1 flex items-center justify-center bg-transparent border-2 border-gray-400 rounded-lg hover:bg-gray-300 text-black text-2xl cursor-pointer"
-                                                onClick={() => handleUpdateQuantity(item.id, -1)}
-                                            >
-                                                -
-                                            </button>
-                                            <span className="w-7 sm:w-8 text-center text-sm sm:text-base">
-                                                {item.quantity}
-                                            </span>
+                                            <div className="flex items-center sm:gap-x-1 ">
+                                                {/* decrease button */}
+                                                <button
+                                                    className="w-6 h-6 pb-1 flex items-center justify-center bg-transparent border-2 border-gray-400 rounded-lg hover:bg-gray-300 text-black text-2xl cursor-pointer"
+                                                    onClick={() => handleUpdateQuantity(item.id, -1)}
+                                                >
+                                                    -
+                                                </button>
+                                                <span className="w-7 sm:w-8 text-center text-sm sm:text-base">
+                                                    {item.quantity}
+                                                </span>
 
-                                            {/* increase button */}
-                                            <button
-                                                className="w-6 h-6 pb-1 flex items-center justify-center bg-transparent border-2 border-gray-400 rounded-lg hover:bg-gray-300 text-black text-xl cursor-pointer"
-                                                onClick={() => handleUpdateQuantity(item.id, 1)}
-                                            >
-                                                +
-                                            </button>
-
-                                            {/* total price */}
-                                            <div className="text-gray-700 text-sm sm:text-base flex justify-between w-full sm:block pl-4">
-                                                <span className="sm:hidden font-semibold">Total:</span>
-                                                {(Number(item.price) * item.quantity).toFixed(2)}
+                                                {/* increase button */}
+                                                <button
+                                                    className="w-6 h-6 pb-1 flex items-center justify-center bg-transparent border-2 border-gray-400 rounded-lg hover:bg-gray-300 text-black text-xl cursor-pointer"
+                                                    onClick={() => handleUpdateQuantity(item.id, 1)}
+                                                >
+                                                    +
+                                                </button>
                                             </div>
 
-                                            {/* remove icon */}
-                                            <div className="self-content sm:self-auto">
-                                                <FaTrash
-                                                    className="text-gray-500 hover:text-red-500 cursor-pointer text-xs sm:text-sm"
-                                                    onClick={() => removeItem(item.id)}
-                                                />
-                                            </div>
+                                        </div>
+                                        {/* total price div-4 */}
+                                        <div className="text-gray-700 text-sm sm:text-base flex justify-between w-full sm:block pl-4">
+                                            <span className="sm:hidden font-semibold">Total:</span>
+                                            {(Number(item.price) * item.quantity).toFixed(2)}
+                                        </div>
+
+                                        {/* remove icon div-5 */}
+                                        <div className="self-center sm:self-auto">
+                                            <FaTrash
+                                                className="text-gray-500 hover:text-red-500 cursor-pointer text-xs sm:text-sm"
+                                                onClick={() => removeItem(item.id)}
+                                            />
                                         </div>
                                     </div>
                                 ))}

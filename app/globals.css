@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 
 
@@ -12,4 +13,14 @@
 
 body {
   @apply px-2 md:px-3 lg:px-20 xl:px-40 bg-slate-50
+}
+
+.overlay-bg {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    253deg,
+    rgba(255, 255, 255, 0) 11%,
+    rgba(0, 0, 0, 1) 99%,
+    rgba(17, 17, 17, 1) 100%
+  );
 }

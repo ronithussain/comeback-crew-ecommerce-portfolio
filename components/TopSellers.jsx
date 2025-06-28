@@ -6,7 +6,10 @@ const TopSellers = () => {
     const cards = products.slice(4, 12).map((item) => ({
         image: item.image,
         text: item.text,
-        price: `$${item.price}` // ডলার সাইন সহ প্রাইস দেখানোর জন্য টেমপ্লেট স্ট্রিং ব্যবহার।
+        price: `$${item.price}`, // ডলার সাইন সহ প্রাইস দেখানোর জন্য টেমপ্লেট স্ট্রিং ব্যবহার।
+        id: item.id,
+        category: item.category,
+        inStock: item.inStock,
     }))
     console.log(cards)
 
